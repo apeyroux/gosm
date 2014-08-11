@@ -18,8 +18,8 @@ type BBox struct {
 }
 
 type Conversion interface {
-	deg2num(t *Tile) (x int, y int)
-	num2deg(t *Tile) (lat float64, long float64)
+	Deg2num(t *Tile) (x int, y int)
+	Num2deg(t *Tile) (lat float64, long float64)
 }
 
 func (*Tile) Deg2num(t *Tile) (x int, y int) {
