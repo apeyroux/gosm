@@ -12,6 +12,11 @@ type Tile struct {
 	Long float64
 }
 
+type BBox struct {
+	TopLeftTile     Tile
+	BottomRightTile Tile
+}
+
 type Conversion interface {
 	deg2num(t *Tile) (x int, y int)
 	num2deg(t *Tile) (lat float64, long float64)
@@ -46,4 +51,12 @@ func NewTileWithXY(x int, y int, z int) (t *Tile) {
 	t.Y = y
 	t.Lat, t.Long = t.Num2deg(t)
 	return
+}
+
+func GetBoxTiles(bbox BBox, z int) []*Tile {
+	for x, y := bbox.BottomRightTile.X, bbox.BottomRightTile.Y; x <= bbox.TopLeftTile.X && y <= bbox.TopLeftTile.Y; func() { x++; y++ }() {
+		//append(tiles, NewTileWithXY(x, y, z))
+		return nil
+	}
+	return nil
 }
