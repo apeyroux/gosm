@@ -56,7 +56,7 @@ func NewTileWithXY(x int, y int, z int) (t *Tile) {
 func GetBoxTiles(bbox BBox, z int) []*Tile {
 	nbtiles := (bbox.BottomRightTile.X - bbox.TopLeftTile.X) * (bbox.BottomRightTile.Y - bbox.TopLeftTile.Y)
 	tiles := make([]*Tile, nbtiles)
-	for x, y, i := bbox.BottomRightTile.X, bbox.BottomRightTile.Y, 0; x <= bbox.TopLeftTile.X && y <= bbox.TopLeftTile.Y; func() { x++; y++; i++ }() {
+	for x, y, i := bbox.BottomRightTile.X, bbox.BottomRightTile.Y, 0; i < nbtiles; func() { x++; y++; i++ }() {
 		tiles[i] = NewTileWithXY(x, y, z)
 	}
 	return tiles
