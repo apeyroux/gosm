@@ -1,6 +1,7 @@
 package gosm
 
 import (
+	"fmt"
 	"math"
 )
 
@@ -53,11 +54,22 @@ func NewTileWithXY(x int, y int, z int) (t *Tile) {
 	return
 }
 
-func GetBoxTiles(bbox BBox, z int) []*Tile {
-	nbtiles := (bbox.BottomRightTile.X - bbox.TopLeftTile.X) * (bbox.BottomRightTile.Y - bbox.TopLeftTile.Y)
-	tiles := make([]*Tile, nbtiles)
-	for x, y, i := bbox.BottomRightTile.X, bbox.BottomRightTile.Y, 0; i < nbtiles; func() { x++; y++; i++ }() {
-		tiles[i] = NewTileWithXY(x, y, z)
+func GetBoxTiles(bbox BBox, z int) ([]*Tile, error) {
+
+	if bbox.TopLeftTile.X > bbox.BottomRightTile.X || bbox.TopLeftTile.Y > bbox.BottomRightTile.Y {
+		return nil, fmt.Errorf("Your bbox is not correct")
 	}
-	return tiles
+
+	nbtiles := ((bbox.BottomRightTile.X - bbox.TopLeftTile.X) + 1) * ((bbox.BottomRightTile.Y - bbox.TopLeftTile.Y) + 1)
+	fmt.Printf("%v\n", nbtiles)
+
+	tiles := make([]*Tile, nbtiles) // ? + 2
+
+	for x, i := 0, 0; x <= (bbox.BottomRightTile.X - bbox.TopLeftTile.X); x++ {
+		for y := 0; y <= (bbox.BottomRightTile.Y - bbox.TopLeftTile.Y); y++ {
+			tiles[i] = NewTileWithXY(bbox.BottomRightTile.X+x, bbox.BottomRightTile.Y+y, z)
+			i += 1
+		}
+	}
+	return tiles, nil
 }
