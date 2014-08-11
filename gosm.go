@@ -54,20 +54,19 @@ func NewTileWithXY(x int, y int, z int) (t *Tile) {
 	return
 }
 
-func GetBoxTiles(bbox BBox, z int) ([]*Tile, error) {
+func GetBoxTiles(bbox BBox) ([]*Tile, error) {
 
 	if bbox.TopLeftTile.X > bbox.BottomRightTile.X || bbox.TopLeftTile.Y > bbox.BottomRightTile.Y {
 		return nil, fmt.Errorf("Your bbox is not correct")
 	}
 
 	nbtiles := ((bbox.BottomRightTile.X - bbox.TopLeftTile.X) + 1) * ((bbox.BottomRightTile.Y - bbox.TopLeftTile.Y) + 1)
-	fmt.Printf("%v\n", nbtiles)
 
 	tiles := make([]*Tile, nbtiles) // ? + 2
 
 	for x, i := 0, 0; x <= (bbox.BottomRightTile.X - bbox.TopLeftTile.X); x++ {
 		for y := 0; y <= (bbox.BottomRightTile.Y - bbox.TopLeftTile.Y); y++ {
-			tiles[i] = NewTileWithXY(bbox.BottomRightTile.X+x, bbox.BottomRightTile.Y+y, z)
+			tiles[i] = NewTileWithXY(bbox.BottomRightTile.X+x, bbox.BottomRightTile.Y+y, bbox.BottomRightTile.Z)
 			i += 1
 		}
 	}
