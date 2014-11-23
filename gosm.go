@@ -63,11 +63,6 @@ func BBoxTiles(topTile Tile, bottomTile Tile) ([]*Tile, error) {
 			for y := tMax.Y; y <= tMin.Y; y++ {
 				tile := NewTileWithXY(x, y, z)
 				tiles = append(tiles, tile)
-				// args := sqlite3.NamedArgs{"$z": z, "$x": x, "$y": y, "$data": data}
-				// err := c.Exec("INSERT INTO tiles VALUES($z, $x, $y, $data)", args) // $c will be NULL
-				// if err != nil {
-				// 	log.Printf("err: %s", err)
-				// }
 			}
 		}
 	}
