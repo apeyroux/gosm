@@ -1,8 +1,6 @@
 package gosm
 
 import (
-	"fmt"
-	"log"
 	"math"
 )
 
@@ -42,7 +40,7 @@ func NewTileWithLatLong(lat float64, long float64, z int) (t *Tile) {
 	t.Lat = lat
 	t.Long = long
 	t.Z = z
-	t.X, t.Y = t.Deg2num(t)
+	t.X, t.Y = t.Deg2num()
 	return
 }
 
@@ -51,26 +49,26 @@ func NewTileWithXY(x int, y int, z int) (t *Tile) {
 	t.Z = z
 	t.X = x
 	t.Y = y
-	t.Lat, t.Long = t.Num2deg(t)
+	t.Lat, t.Long = t.Num2deg()
 	return
 }
 
 func BBoxTiles(topTile Tile, bottomTile Tile) ([]*Tile, error) {
-
-	if topTile.X > bottomTile.X || topTile.Y > bottomTile.Y {
-		return nil, fmt.Errorf("Your bbox is not correct")
-	}
-
-	nbtiles := ((bottomTile.X - topTile.X) + 1) * ((bottomTile.Y - topTile.Y) + 1)
-
-	log.Printf("%d", nbtiles)
-
-	tiles := make([]*Tile, nbtiles) // ? + 2
-
-	for x, i := 0, 0; x <= (bottomTile.X - topTile.X); x++ {
-		for y := 0; y <= (bottomTile.Y - topTile.Y); y++ {
-			tiles[i] = NewTileWithXY(bottomTile.X+x, bottomTile.Y+y, bottomTile.Z)
-			i += 1
+	tiles := []*Tile{}
+	for _, z := range []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19} {
+		tMax := NewTileWithLatLong(topTile.Lat, topTile.Long, z)
+		tMin := NewTileWithLatLong(bottomTile.Lat, bottomTile.Long, z)
+		//nbtiles := math.Abs((float64(tMax.X))-float64(tMin.X)) + math.Abs(float64(tMax.Y)-float64(tMin.Y))
+		for x := tMin.X; x <= tMax.X; x++ {
+			for y := tMax.Y; y <= tMin.Y; y++ {
+				tile := NewTileWithXY(x, y, z)
+				tiles = append(tiles, tile)
+				// args := sqlite3.NamedArgs{"$z": z, "$x": x, "$y": y, "$data": data}
+				// err := c.Exec("INSERT INTO tiles VALUES($z, $x, $y, $data)", args) // $c will be NULL
+				// if err != nil {
+				// 	log.Printf("err: %s", err)
+				// }
+			}
 		}
 	}
 	return tiles, nil
